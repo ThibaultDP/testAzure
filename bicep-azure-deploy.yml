@@ -1,0 +1,15 @@
+# bicep-azure-deploy.yml
+
+parameters:
+  bicepFilePath: ''
+
+steps:
+  - task: AzureCLI@2
+    displayName: 'Deploy Azure Resources'
+    inputs:
+      azureSubscription: '$(subscriptionId)'
+      scriptType: 'bash'
+      scriptLocation: 'inlineScript'
+      inlineScript: |
+        az bicep build --file $(bicepFilePath)
+        az deployment group create --resource-group $(resourceGroupName) --template-file $(bicepFilePath) --parameters "{}"
